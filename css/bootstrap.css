@@ -11,6 +11,7 @@ html {
 }
 body {
   margin: 0;
+  background: url('glitter_bg.png') repeat;
 }
 article,
 aside,
