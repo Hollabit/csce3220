@@ -5,13 +5,16 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
+  	background: url('http://i.imgur.com/PvUGwjo.png');
+	background-repeat: repeat;
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
+
 body {
   margin: 0;
-  background: url('glitter_bg.png') repeat;
+  background-color: purple;
 }
 article,
 aside,
