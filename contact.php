@@ -1,18 +1,43 @@
-$name = $_POST['name'];
-$email = $_POST['email'];
-$message = $_POST['message'];
-$human = intval($_POST['human']);
+<?php
 
-$from = 'Demo Contact Form'; 
-$to = 'example@domain.com'; 
-$subject = 'Message from Contact Demo ';
- 
-$body = "From: $name\n E-Mail: $email\n Message:\n $message";
+// configure
+$from = 'Demo contact form <demo@domain.com>';
+$sendTo = 'Demo contact form <demo@domain.com>';
+$subject = 'New message from contact form';
+$fields = array('name' => 'Name', 'surname' => 'Surname', 'phone' => 'Phone', 'email' => 'Email', 'message' => 'Message'); // array variable name => Text to appear in email
+$okMessage = 'Contact form successfully submitted. Thank you, I will get back to you soon!';
+$errorMessage = 'There was an error while submitting the form. Please try again later';
 
-if (!$_POST['name']) {
-	$errName = 'Please enter your name';
+// let's do the sending
+
+try
+{
+    $emailText = "You have new message from contact form\n=============================\n";
+
+    foreach ($_POST as $key => $value) {
+
+        if (isset($fields[$key])) {
+            $emailText .= "$fields[$key]: $value\n";
+        }
+    }
+
+    mail($sendTo, $subject, $emailText, "From: " . $from);
+
+    $responseArray = array('type' => 'success', 'message' => $okMessage);
+}
+catch (\Exception $e)
+{
+    $responseArray = array('type' => 'danger', 'message' => $errorMessage);
 }
 
-if (!$_POST['email'] || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-	$errEmail = 'Please enter a valid email address';
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $encoded = json_encode($responseArray);
+    
+    header('Content-Type: application/json');
+    
+    echo $encoded;
 }
+else {
+    echo $responseArray['message'];
+}
+?>
